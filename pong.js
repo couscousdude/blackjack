@@ -34,42 +34,89 @@ class Ball extends Rect {
     }
 }
 
-let lastTime;
-function callback(ms) {
-    if (lastTime) {
-        updatePosition((ms - lastTime) / 1000);
+class Player extends Rect {
+    constructor() {
+        super(20, 100);
+        this.score = 0;
     }
-    lastTime = ms;
-    requestAnimationFrame(callback); // requestAnimationFrame is a function which takes a callback to update an animation before the next repaint
 }
 
-// updatePosition allowed the position of the ball to be changed
-function updatePosition(deltaTime) {
-    ball.pos.x += ball.velocity.x * deltaTime;
-    ball.pos.y += ball.velocity.y * deltaTime;
-    context.fillStyle = '#000'; // fill the rectangle black
-    context.fillRect(0, 0, canvas.width, canvas.height);
+class Pong {
+    constructor(canvas) {
+        this._canvas = canvas;
+        this._context = canvas.getContext('2d'); // we need a 2d context
 
-    if (ball.left < 0 || ball.right > canvas.width) {
-        ball.velocity.x = -ball.velocity.x;
+        this.ball = new Ball;
+        this.ball.pos.x = 100;
+        this.ball.pos.y = 100;
+
+        this.ball.velocity.x = 100;
+        this.ball.velocity.y = 100;
+
+        this.players = [
+            new Player,
+            new Player
+        ];
+
+        this.players[0].pos.x = 40;
+        this.players[1].pos.x = this._canvas.width - 40;
+        this.players.forEach(player => player.pos.y = this._canvas.height / 2);
+
+        let lastTime;
+        const callback = (ms) => {
+            if (lastTime) {
+                this.updatePosition((ms - lastTime) / 1000);
+            }
+            lastTime = ms;
+            requestAnimationFrame(callback); // requestAnimationFrame is a function which takes a callback to update an animation before the next repaint
+        }
+        callback();
     }
 
-    if (ball.top < 0 || ball.bottom > canvas.height) {
-        ball.velocity.y = -ball.velocity.y;
+    collide(player, ball) {
+        if (ball.right > player.left && ball.left < player.right
+            && player.top < ball.bottom && player.bottom > ball.top) {
+            this.ball.velocity.x = -this.ball.velocity.x;
+        }
     }
 
-    context.fillStyle = '#fff'; //fill the ball white
-    context.fillRect(ball.pos.x, ball.pos.y, ball.size.x, ball.size.y);
+    draw() {
+        this._context.fillStyle = '#000'; // fill the rectangle black
+        this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+        this.drawRect(this.ball);
+        this.players.forEach(player => this.drawRect(player));
+    }
+
+    drawRect(rect) {
+        this._context.fillStyle = '#fff';
+        this._context.fillRect(rect.left, rect.top, rect.size.x, rect.size.y);
+    }
+
+    // updatePosition allows the position of the ball to change
+    updatePosition(deltaTime) {
+        this.ball.pos.x += this.ball.velocity.x * deltaTime;
+        this.ball.pos.y += this.ball.velocity.y * deltaTime;
+
+        if (this.ball.left < 0 || this.ball.right > this._canvas.width) {
+            this.ball.velocity.x = -this.ball.velocity.x;
+        }
+    
+        if (this.ball.top < 0 || this.ball.bottom > this._canvas.height) {
+            this.ball.velocity.y = -this.ball.velocity.y;
+        }
+
+        this.players[1].pos.y = this.ball.pos.y;
+
+        this.players.forEach(player => this.collide(player, this.ball));
+
+        this.draw();
+    }
 }
 
 const canvas = document.getElementById('pong'); // initialize the canvas
-const context = canvas.getContext('2d'); // we need a 2d context
 
-const ball = new Ball;
-ball.pos.x = 100;
-ball.pos.y = 100;
-ball.velocity.x = 100;
-ball.velocity.y = 100;
-console.log(ball);
+const pong = new Pong(canvas);
 
-callback();
+canvas.addEventListener('mousemove', event => {
+    pong.players[0].pos.y = event.offsetY;
+})
