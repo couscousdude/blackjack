@@ -47,11 +47,6 @@ class Pong {
         this._context = canvas.getContext('2d'); // we need a 2d context
 
         this.ball = new Ball;
-        this.ball.pos.x = 100;
-        this.ball.pos.y = 100;
-
-        this.ball.velocity.x = 100;
-        this.ball.velocity.y = 100;
 
         this.players = [
             new Player,
@@ -68,9 +63,10 @@ class Pong {
                 this.updatePosition((ms - lastTime) / 1000);
             }
             lastTime = ms;
-            requestAnimationFrame(callback); // requestAnimationFrame is a function which takes a callback to update an animation before the next repaint
+            requestAnimationFrame(callback); // requestAnimationFrame is a function which takes a callback to update an animation before the next repaint  
         }
         callback();
+        this.reset();
     }
 
     collide(player, ball) {
@@ -92,13 +88,35 @@ class Pong {
         this._context.fillRect(rect.left, rect.top, rect.size.x, rect.size.y);
     }
 
+    reset() {
+        this.ball.pos.x = this._canvas.width / 2;
+        this.ball.pos.y = this._canvas.height / 2;
+        this.ball.velocity.x = 0;
+        this.ball.velocity.y = 0;
+    }
+
+    start() {
+        if (this.ball.velocity.x === 0 && this.ball.velocity.y === 0) {
+            this.ball.velocity.x = 300;
+            this.ball.velocity.y = 300;
+        }
+    }
+
     // updatePosition allows the position of the ball to change
     updatePosition(deltaTime) {
         this.ball.pos.x += this.ball.velocity.x * deltaTime;
         this.ball.pos.y += this.ball.velocity.y * deltaTime;
 
         if (this.ball.left < 0 || this.ball.right > this._canvas.width) {
-            this.ball.velocity.x = -this.ball.velocity.x;
+            let playerID;
+            if (this.ball.velocity.x < 0) {
+                playerID = 1;
+            } else {
+                playerID = 0;
+            }
+            console.log(playerID);
+            this.players[playerID].score++;
+            this.reset();
         }
     
         if (this.ball.top < 0 || this.ball.bottom > this._canvas.height) {
@@ -119,4 +137,8 @@ const pong = new Pong(canvas);
 
 canvas.addEventListener('mousemove', event => {
     pong.players[0].pos.y = event.offsetY;
+})
+
+canvas.addEventListener('click', event => {
+    pong.start();
 })
