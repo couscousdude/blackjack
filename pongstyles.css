@@ -15,7 +15,12 @@ canvas {
     font-family: 'Press Start 2P', cursive;
 }
 
-#credits {
+#footer {   
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:30px;
+    width:100%;
     color: white;
     font-family: 'Noto Sans HK', sans-serif;
-}
+ }

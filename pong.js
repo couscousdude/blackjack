@@ -199,6 +199,7 @@ class Pong {
             }
             this.players[1].pos.y -= 2 + botSpeedIncrease;
         }
+        // this.players[1].pos.y = this.ball.pos.y;
 
         this.players.forEach(player => this.collide(player, this.ball));
 
