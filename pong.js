@@ -4,6 +4,14 @@ class Vector {
         this.x = x;
         this.y = y;
     }
+    get len() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+    set len(value) {
+        const factor = value / this.len;
+        this.x *= factor;
+        this.y *= factor;
+    }
 }
 
 // create a rectangle class
@@ -66,26 +74,79 @@ class Pong {
             requestAnimationFrame(callback); // requestAnimationFrame is a function which takes a callback to update an animation before the next repaint  
         }
         callback();
+
+        this.CHAR_PIXEL = 10;
+        this.CHARS = [
+        '111101101101111',
+        '010010010010010',
+        '111001111100111',
+        '111001111001111',
+        '101101111001001',
+        '111100111001111',
+        '111100111101111',
+        '111001001001001',
+        '111101111101111',
+        '111101111001111'
+        ].map(str => {
+            const canvas = document.createElement('canvas');
+            canvas.height = this.CHAR_PIXEL * 5;
+            canvas.width = this.CHAR_PIXEL * 3;
+            const context = canvas.getContext('2d');
+            context.fillStyle = '#fff';
+            str.split('').forEach((fill, index) => {
+                if (fill === 1) {
+                    context.fillRect(
+                        (index % 3) * this.CHAR_PIXEL,
+                        (index / 3 | 0) * this.CHAR_PIXEL,
+                        this.CHAR_PIXEL,
+                        this.CHAR_PIXEL);
+                }
+            });
+            return canvas;
+        });
+
         this.reset();
     }
 
     collide(player, ball) {
         if (ball.right > player.left && ball.left < player.right
             && player.top < ball.bottom && player.bottom > ball.top) {
+            const len = ball.velocity.len;
             this.ball.velocity.x = -this.ball.velocity.x;
+            ball.velocity.y += 300 * (Math.random() - 0.5);
+            ball.velocity.len = len * 1.05;
         }
     }
 
     draw() {
         this._context.fillStyle = '#000'; // fill the rectangle black
         this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+
         this.drawRect(this.ball);
         this.players.forEach(player => this.drawRect(player));
+
+        this.drawScore();
     }
 
     drawRect(rect) {
         this._context.fillStyle = '#fff';
         this._context.fillRect(rect.left, rect.top, rect.size.x, rect.size.y);
+    }
+
+    drawScore() {
+        const align = this._canvas.width / 3;
+        const CHAR_WIDTH = this.CHAR_PIXEL * 4;
+        this.players.forEach((player, index) => {
+            const chars = player.score.toString().split('');
+            const offset = align * 
+                (index + 1) - 
+                (CHAR_WIDTH * chars.length / 2) * 
+                this.CHAR_PIXEL / 2;
+            chars.forEach((chars, pos) => {
+                this._context.drawImage(this.CHARS[chars|0],
+                    offset + pos * CHAR_WIDTH, 20);
+            });
+        });
     }
 
     reset() {
@@ -97,8 +158,9 @@ class Pong {
 
     start() {
         if (this.ball.velocity.x === 0 && this.ball.velocity.y === 0) {
-            this.ball.velocity.x = 300;
-            this.ball.velocity.y = 300;
+            this.ball.velocity.x = 300 * (Math.random() > .5 ? 1 : -1);
+            this.ball.velocity.y = 300 * (Math.random() * 2 -1);
+            this.ball.velocity.len = 200;
         }
     }
 

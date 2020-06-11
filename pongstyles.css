@@ -1,7 +1,13 @@
 body {
     background-color: #262626;
 }
-h1 {
+
+.pressStartFont {
     color: white;
     font-family: 'Press Start 2P', cursive;
+}
+
+#credits {
+    color: white;
+    font-family: 'Noto Sans HK', sans-serif;
 }
