@@ -153,8 +153,8 @@ class Pong {
 
     start() {
         if (this.ball.velocity.x === 0 && this.ball.velocity.y === 0) {
-            this.ball.velocity.x = 300 * (Math.random() > .5 ? 1 : -1);
-            this.ball.velocity.y = 300 * (Math.random() * 2 -1);
+            this.ball.velocity.x = 500 * (Math.random() > .5 ? 1 : -1);
+            this.ball.velocity.y = 500 * (Math.random() * 2 -1);
             this.ball.velocity.len = 200;
         }
     }
@@ -187,7 +187,7 @@ class Pong {
             } else if (this.ball.velocity.len === 500) {
                 botSpeedIncrease = 3;
             }
-            this.players[1].pos.y += 2 + botSpeedIncrease;
+            this.players[1].pos.y += 3 + botSpeedIncrease;
         }
 
         if (this.players[1].pos.y > this.ball.pos.y) {
@@ -197,7 +197,7 @@ class Pong {
             } else if (this.ball.velocity.len === 500) {
                 botSpeedIncrease = 2.5;
             }
-            this.players[1].pos.y -= 2 + botSpeedIncrease;
+            this.players[1].pos.y -= 3 + botSpeedIncrease;
         }
         // this.players[1].pos.y = this.ball.pos.y;
 
