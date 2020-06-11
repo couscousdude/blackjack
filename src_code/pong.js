@@ -61,9 +61,9 @@ class Pong {
             new Player
         ];
 
-        this.hit = new Audio('hit.mp3');
-        this.bounce = new Audio('bounce.mp3');
-        this.loss = new Audio('loss.mp3');
+        this.hit = new Audio('./sounds/hit.mp3');
+        this.bounce = new Audio('./sounds/bounce.mp3');
+        this.loss = new Audio('./sounds/loss.mp3');
 
         this.players[0].pos.x = 40;
         this.players[1].pos.x = this._canvas.width - 40;
