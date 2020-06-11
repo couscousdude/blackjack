@@ -61,6 +61,10 @@ class Pong {
             new Player
         ];
 
+        this.hit = new Audio('hit.mp3');
+        this.bounce = new Audio('bounce.mp3');
+        this.loss = new Audio('loss.mp3');
+
         this.players[0].pos.x = 40;
         this.players[1].pos.x = this._canvas.width - 40;
         this.players.forEach(player => player.pos.y = this._canvas.height / 2);
@@ -109,6 +113,7 @@ class Pong {
         if (ball.right > player.left && ball.left < player.right
             && player.top < ball.bottom && player.bottom > ball.top) {
             const len = ball.velocity.len;
+            this.hit.play();
             this.ball.velocity.x = -this.ball.velocity.x;
             ball.velocity.y += 300 * (Math.random() - 0.5);
             ball.velocity.len = len * 1.05;
@@ -173,11 +178,13 @@ class Pong {
             }
             console.log(playerID);
             this.players[playerID].score++;
+            this.loss.play();
             this.reset();
         }
     
         if (this.ball.top < 0 || this.ball.bottom > this._canvas.height) {
             this.ball.velocity.y = -this.ball.velocity.y;
+            this.bounce.play();
         }
 
         if (this.players[1].pos.y < this.ball.pos.y) {
