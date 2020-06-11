@@ -1,5 +1,13 @@
 body {
     background-color: #262626;
+    align-items: center;
+}
+
+canvas {
+    border: solid 1px #fff;
+    border-left: none;
+    border-right: none;
+    image-rendering: pixelated;
 }
 
 .pressStartFont {
