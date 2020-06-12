@@ -191,7 +191,7 @@ class Pong {
             let botSpeedIncrease;
             if (this.ball.velocity.len < 500) {
                 botSpeedIncrease = this.ball.velocity.len / 200;
-            } else if (this.ball.velocity.len === 500) {
+            } else if (this.ball.velocity.len >= 500) {
                 botSpeedIncrease = 3;
             }
             this.players[1].pos.y += 3 + botSpeedIncrease;
@@ -201,7 +201,7 @@ class Pong {
             let botSpeedIncrease;
             if (this.ball.velocity.len < 500) {
                 botSpeedIncrease = this.ball.velocity.len / 200;
-            } else if (this.ball.velocity.len === 500) {
+            } else if (this.ball.velocity.len >= 500) {
                 botSpeedIncrease = 2.5;
             }
             this.players[1].pos.y -= 3 + botSpeedIncrease;
