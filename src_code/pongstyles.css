@@ -24,3 +24,7 @@ canvas {
     color: white;
     font-family: 'Noto Sans HK', sans-serif;
 }
+
+#instructions {
+    font-size: small;
+}
