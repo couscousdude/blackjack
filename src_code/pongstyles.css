@@ -1,6 +1,11 @@
 body {
     background-color: #262626;
     align-items: center;
+    text-align: center;
+}
+
+ul {
+    display: inline-block
 }
 
 canvas {
@@ -8,6 +13,11 @@ canvas {
     border-left: none;
     border-right: none;
     image-rendering: pixelated;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 .pressStartFont {
@@ -27,4 +37,9 @@ canvas {
 
 #instructions {
     font-size: small;
+    text-align: left;
+}
+
+.center_me {
+    margin:  0 auto
 }
