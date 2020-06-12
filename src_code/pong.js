@@ -64,6 +64,7 @@ class Pong {
         this.hit = new Audio('./sounds/hit.mp3');
         this.bounce = new Audio('./sounds/bounce.mp3');
         this.loss = new Audio('./sounds/loss.mp3');
+        this.startup = new Audio('./sounds/startup.wav');
 
         this.players[0].pos.x = 40;
         this.players[1].pos.x = this._canvas.width - 40;
@@ -157,6 +158,7 @@ class Pong {
     }
 
     start() {
+        this.startup.play();
         if (this.ball.velocity.x === 0 && this.ball.velocity.y === 0) {
             this.ball.velocity.x = 500 * (Math.random() > .5 ? 1 : -1);
             this.ball.velocity.y = 500 * (Math.random() * 2 -1);
